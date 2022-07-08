@@ -15,7 +15,7 @@ main()
   fixed_location=$(get_tmux_option "@dracula-fixed-location")
   show_powerline=$(get_tmux_option "@dracula-show-powerline" false)
   show_flags=$(get_tmux_option "@dracula-show-flags" false)
-  show_left_icon=$(get_tmux_option "@dracula-show-left-icon" smiley)
+  show_left_icon=$(get_tmux_option "@dracula-show-left-icon" cool)
   show_left_icon_padding=$(get_tmux_option "@dracula-left-icon-padding" 1)
   show_military=$(get_tmux_option "@dracula-military-time" false)
   show_timezone=$(get_tmux_option "@dracula-show-timezone" true)
@@ -41,7 +41,7 @@ main()
 
   # Handle left icon configuration
   case $show_left_icon in
-    smiley)
+    cool)
       left_icon="😎";;
     session)
       left_icon="#S";;
@@ -129,54 +129,7 @@ main()
 
     if [ $plugin = "git" ]; then
       IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-git-colors" "green dark_gray")
-        script="#($current_dir/git.sh)"     
-    fi
-
-    if [ $plugin = "battery" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-battery-colors" "pink dark_gray")
-      script="#($current_dir/battery.sh)"
-    fi
-
-    if [ $plugin = "gpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-gpu-usage-colors" "pink dark_gray")
-      script="#($current_dir/gpu_usage.sh)"
-    fi
-
-    if [ $plugin = "cpu-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-cpu-usage-colors" "orange dark_gray")
-      script="#($current_dir/cpu_info.sh)"
-    fi
-
-    if [ $plugin = "ram-usage" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-ram-usage-colors" "cyan dark_gray")
-      script="#($current_dir/ram_info.sh)"
-    fi
-
-    if [ $plugin = "network" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-colors" "cyan dark_gray")
-      script="#($current_dir/network.sh)"
-    fi
-
-    if [ $plugin = "network-bandwidth" ]; then
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-network-bandwidth-colors" "cyan dark_gray")
-      tmux set-option -g status-right-length 250
-      script="#($current_dir/network_bandwidth.sh)"
-    fi
-
-    if [ $plugin = "network-ping" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-ping-colors" "cyan dark_gray")
-      script="#($current_dir/network_ping.sh)"
-    fi
-
-    if [ $plugin = "weather" ]; then
-      # wait unit $datafile exists just to avoid errors
-      # this should almost never need to wait unless something unexpected occurs
-      while [ ! -f $datafile ]; do
-        sleep 0.01
-      done
-
-      IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-weather-colors" "orange dark_gray")
-      script="#(cat $datafile)"
+        script="#($current_dir/git.sh)"
     fi
 
     if [ $plugin = "time" ]; then
@@ -192,12 +145,6 @@ main()
       fi
     fi
 
-    if $show_powerline; then
-      tmux set-option -ga status-right "#[fg=${!colors[0]},bg=${powerbg},nobold,nounderscore,noitalics]${right_sep}#[fg=${!colors[1]},bg=${!colors[0]}] $script "
-      powerbg=${!colors[0]}
-    else
-      tmux set-option -ga status-right "#[fg=${!colors[1]},bg=${!colors[0]}] $script "
-    fi
   done
 
   # Window option
